@@ -7,6 +7,7 @@ export NAMESPACE="${NAMESPACE:=homework}"
 # Start minikube if needed
 if ! minikube status > /dev/null; then
   minikube start
+  minikube addons enable metrics-server
 fi
 
 # Apply kubernetes manifests

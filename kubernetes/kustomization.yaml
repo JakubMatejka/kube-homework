@@ -8,6 +8,7 @@ resources:
   - wordpress/service.yml
   - wordpress/pvc.yml
   - wordpress/config-map.yml
+  - wordpress/autoscale.yml
   - wordpress/deployment.yml
 
 secretGenerator:
