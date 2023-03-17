@@ -1,6 +1,7 @@
 namespace: homework
 resources:
   - namespace.yml
+  - quota.yml
   - mysql/service.yml
   - mysql/pvc.yml
   - mysql/deployment.yml
