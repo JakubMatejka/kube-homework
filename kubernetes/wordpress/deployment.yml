@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hw-wordpress
+  namespace: homework
+  labels:
+    app: hw-wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hw-wordpress
+  template:
+    metadata:
+      labels:
+        app: hw-wordpress
+    spec:
+      volumes:
+        - name: hw-wordpress-storage
+          persistentVolumeClaim:
+            claimName: hw-wordpress-pvc
+      containers:
+        - name: wordpress
+          image: docker.io/bitnami/wordpress:6.1.1
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: WORDPRESS_DATABASE_HOST
+              value: hw-mysql-service
+            - name: WORDPRESS_DATABASE_NAME
+              value: wp_db
+            - name: WORDPRESS_DATABASE_USER
+              value: wp_user
+            - name: WORDPRESS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hw-mysql-user-pass
+                  key: password
+            - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
+              valueFrom:
+                configMapKeyRef:
+                  name: hw-wordpress-config
+                  key: WORDPRESS_HTACCESS_OVERRIDE_NONE
+            - name: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
+              valueFrom:
+                configMapKeyRef:
+                  name: hw-wordpress-config
+                  key: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
+            - name: WORDPRESS_BLOG_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: hw-wordpress-config
+                  key: WORDPRESS_BLOG_NAME
+            - name: WORDPRESS_SKIP_BOOTSTRAP
+              valueFrom:
+                configMapKeyRef:
+                  name: hw-wordpress-config
+                  key: WORDPRESS_SKIP_BOOTSTRAP
+            - name: WORDPRESS_SCHEME
+              value: http
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: '8080'
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: hw-wordpress-storage
+              mountPath: /bitnami/wordpress
+              subPath: wordpress
+          livenessProbe:
+            httpGet:
+              path: /wp-json/wp/v2
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /wp-json/wp/v2
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3

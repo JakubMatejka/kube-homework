@@ -1,0 +1,18 @@
+namespace: homework
+resources:
+  - namespace.yml
+  - mysql/service.yml
+  - mysql/pvc.yml
+  - mysql/deployment.yml
+  - wordpress/service.yml
+  - wordpress/pvc.yml
+  - wordpress/config-map.yml
+  - wordpress/deployment.yml
+
+secretGenerator:
+  - name: hw-mysql-root-pass
+    literals:
+    - password=rootPassABC
+  - name: hw-mysql-user-pass
+    literals:
+    - password=userPassXYZ
