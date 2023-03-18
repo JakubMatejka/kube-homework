@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appPrefix }}-wordpress
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.appPrefix }}-wordpress
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appPrefix }}-wordpress
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appPrefix }}-wordpress
+    spec:
+      volumes:
+        - name: {{ .Values.appPrefix }}-wordpress-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.appPrefix }}-wordpress-pvc
+      containers:
+        - name: wordpress
+          image: "{{ .Values.wordpress.image.name }}:{{ .Values.wordpress.image.tag }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: WORDPRESS_DATABASE_HOST
+              value: {{ .Values.appPrefix }}-mysql-service
+            - name: WORDPRESS_DATABASE_NAME
+              value: wp_db
+            - name: WORDPRESS_DATABASE_USER
+              value: wp_user
+            - name: WORDPRESS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.appPrefix }}-mysql-user-pass
+                  key: password
+            - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.appPrefix }}-wordpress-config
+                  key: WORDPRESS_HTACCESS_OVERRIDE_NONE
+            - name: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.appPrefix }}-wordpress-config
+                  key: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
+            - name: WORDPRESS_BLOG_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.appPrefix }}-wordpress-config
+                  key: WORDPRESS_BLOG_NAME
+            - name: WORDPRESS_SKIP_BOOTSTRAP
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.appPrefix }}-wordpress-config
+                  key: WORDPRESS_SKIP_BOOTSTRAP
+            - name: WORDPRESS_SCHEME
+              value: http
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: '8080'
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: {{ .Values.appPrefix }}-wordpress-storage
+              mountPath: /bitnami/wordpress
+              subPath: wordpress
+          livenessProbe:
+            httpGet:
+              path: /wp-json/wp/v2
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /wp-json/wp/v2
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3

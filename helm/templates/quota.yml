@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ .Values.appPrefix }}-quota
+  namespace: {{ .Values.namespace }}
+spec:
+  hard:
+    cpu: {{ .Values.quota.cpu }}
+    memory: {{ .Values.quota.memory }}

@@ -1,0 +1,18 @@
+appPrefix: hw
+namespace: homework
+
+mysql:
+  image:
+    name: arm64v8/mysql
+    tag: 8.0
+  rootPassword: rootPassABC
+  userPassword: userPassXYZ
+
+wordpress:
+  image:
+    name: docker.io/bitnami/wordpress
+    tag: 6.1.1
+
+quota:
+  cpu: "2"
+  memory: 2Gi

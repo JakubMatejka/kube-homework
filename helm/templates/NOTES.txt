@@ -1,0 +1,2 @@
+Access the WordPress site using command:
+minikube service --url --namespace "{{ .Values.namespace }}" {{ .Values.appPrefix }}-wordpress-service
