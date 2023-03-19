@@ -11,3 +11,10 @@ sh deploy_minikube.sh
 ```shell
 helm install homework ./helm
 ```
+
+## Terraform setup
+
+```shell
+cd ../terraform
+terraform apply
+```
