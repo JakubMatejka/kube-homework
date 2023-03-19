@@ -77,7 +77,7 @@ spec:
               path: /wp-json/wp/v2
               port: http
               scheme: HTTP
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
@@ -87,7 +87,7 @@ spec:
               path: /wp-json/wp/v2
               port: http
               scheme: HTTP
-            initialDelaySeconds: 60
+            initialDelaySeconds: 90
             timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1

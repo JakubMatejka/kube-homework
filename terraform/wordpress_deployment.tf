@@ -80,7 +80,7 @@ resource "kubernetes_manifest" "hw_wordpress_deployment" {
                   "port" = "http"
                   "scheme" = "HTTP"
                 }
-                "initialDelaySeconds" = 60
+                "initialDelaySeconds" = 120
                 "periodSeconds" = 10
                 "successThreshold" = 1
                 "timeoutSeconds" = 10
@@ -100,7 +100,7 @@ resource "kubernetes_manifest" "hw_wordpress_deployment" {
                   "port" = "http"
                   "scheme" = "HTTP"
                 }
-                "initialDelaySeconds" = 60
+                "initialDelaySeconds" = 90
                 "periodSeconds" = 10
                 "successThreshold" = 1
                 "timeoutSeconds" = 10
