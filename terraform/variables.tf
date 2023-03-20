@@ -7,7 +7,7 @@ variable "namespace" {
 variable "mysql_image_name" {
   type        = string
   description = "MySQL image name"
-  default     = "arm64v8/mysql"
+  default     = "mysql"
 }
 
 variable "mysql_image_tag" {

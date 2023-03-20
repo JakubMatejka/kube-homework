@@ -6,7 +6,7 @@ export NAMESPACE="${NAMESPACE:=homework}"
 
 # Start minikube if needed
 if ! minikube status > /dev/null; then
-  minikube start
+  minikube start #--nodes 2
   minikube addons enable metrics-server
 fi
 

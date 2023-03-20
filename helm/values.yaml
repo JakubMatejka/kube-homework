@@ -3,7 +3,7 @@ namespace: homework
 
 mysql:
   image:
-    name: arm64v8/mysql
+    name: mysql
     tag: 8.0
   rootPassword: rootPassABC
   userPassword: userPassXYZ

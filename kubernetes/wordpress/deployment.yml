@@ -15,6 +15,9 @@ spec:
       labels:
         app: hw-wordpress
     spec:
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: "OnRootMismatch"
       volumes:
         - name: hw-wordpress-storage
           persistentVolumeClaim:

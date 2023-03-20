@@ -124,6 +124,10 @@ resource "kubernetes_manifest" "hw_wordpress_deployment" {
               ]
             },
           ]
+          "securityContext" = {
+            "fsGroup" = 2000
+            "fsGroupChangePolicy" = "OnRootMismatch"
+          },
           "volumes" = [
             {
               "name" = "hw-wordpress-storage"
